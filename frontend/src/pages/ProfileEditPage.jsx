@@ -3,6 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import BaseLayout from '@/layouts/BaseLayout';
 import SkillRating from '@/components/SkillRating';
+import Input from '@/components/Input';
+import Button from '@/components/Button';
 import { getMyProfile, updateMyProfile } from '@/services/profileService';
 
 function ProfileEditPage() {
@@ -97,48 +99,44 @@ function ProfileEditPage() {
     <BaseLayout>
       <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">Edit Your Profile</h1>
-          <p className="text-gray-600">Update your profile information and skill ratings</p>
+          <h1 className="text-3xl font-bold text-primary mb-2">Edit Your Profile</h1>
+          <p className="text-secondary">Update your profile information and skill ratings</p>
         </div>
 
         {error && (
-          <div className="mb-6 rounded-md bg-red-50 p-4">
+          <div className="mb-6 rounded-md bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 p-4">
             <div className="flex">
               <div className="ml-3">
-                <h3 className="text-sm font-medium text-red-800">{error}</h3>
+                <h3 className="text-sm font-medium text-red-800 dark:text-red-200">{error}</h3>
               </div>
             </div>
           </div>
         )}
 
         {success && (
-          <div className="mb-6 rounded-md bg-green-50 p-4">
+          <div className="mb-6 rounded-md bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 p-4">
             <div className="flex">
               <div className="ml-3">
-                <h3 className="text-sm font-medium text-green-800">{success}</h3>
+                <h3 className="text-sm font-medium text-green-800 dark:text-green-200">{success}</h3>
               </div>
             </div>
           </div>
         )}
 
-        <form onSubmit={handleSubmit} className="bg-white rounded-lg shadow-md p-6">
+        <form onSubmit={handleSubmit} className="bg-surface rounded-lg shadow-md p-6 border border-theme">
           <div className="mb-6">
-            <label htmlFor="display_name" className="block text-sm font-medium text-gray-700 mb-2">
-              Display Name
-            </label>
-            <input
-              type="text"
+            <Input
               id="display_name"
               name="display_name"
+              label="Display Name"
               value={formData.display_name}
               onChange={handleChange}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
               placeholder={user?.username || 'Your display name'}
             />
           </div>
 
           <div className="mb-6">
-            <label htmlFor="playing_level" className="block text-sm font-medium text-gray-700 mb-2">
+            <label htmlFor="playing_level" className="block text-sm font-medium text-primary mb-2">
               Playing Level
             </label>
             <select
@@ -146,7 +144,7 @@ function ProfileEditPage() {
               name="playing_level"
               value={formData.playing_level}
               onChange={handleChange}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-700 rounded-md shadow-sm focus:outline-none focus:ring-primary-600 focus:border-primary-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
             >
               <option value="">Select your level</option>
               <option value="Beginner">Beginner</option>
@@ -156,7 +154,7 @@ function ProfileEditPage() {
           </div>
 
           <div className="mb-6">
-            <label htmlFor="bio" className="block text-sm font-medium text-gray-700 mb-2">
+            <label htmlFor="bio" className="block text-sm font-medium text-primary mb-2">
               Bio
             </label>
             <textarea
@@ -165,16 +163,16 @@ function ProfileEditPage() {
               rows="4"
               value={formData.bio}
               onChange={handleChange}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+              className="w-full px-3 py-2 border border-theme rounded-md shadow-sm focus:outline-none focus:ring-primary-600 focus:border-primary-600 bg-secondary text-primary"
               placeholder="Tell us about yourself..."
               maxLength={500}
             />
-            <p className="mt-1 text-sm text-gray-500">{formData.bio.length}/500</p>
+            <p className="mt-1 text-sm text-tertiary">{formData.bio.length}/500</p>
           </div>
 
           <div className="mb-6">
-            <h3 className="text-lg font-semibold text-gray-900 mb-4">Skill Ratings</h3>
-            <p className="text-sm text-gray-600 mb-4">
+            <h3 className="text-lg font-semibold text-primary mb-4">Skill Ratings</h3>
+            <p className="text-sm text-secondary mb-4">
               Rate your skills from 1 (Beginner) to 10 (Expert)
             </p>
             <SkillRating
@@ -200,50 +198,43 @@ function ProfileEditPage() {
           </div>
 
           <div className="mb-6">
-            <label htmlFor="location" className="block text-sm font-medium text-gray-700 mb-2">
-              Location
-            </label>
-            <input
-              type="text"
+            <Input
               id="location"
               name="location"
+              label="Location"
               value={formData.location}
               onChange={handleChange}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
               placeholder="Your location"
             />
           </div>
 
           <div className="mb-6">
-            <label htmlFor="website" className="block text-sm font-medium text-gray-700 mb-2">
-              Website
-            </label>
-            <input
-              type="url"
+            <Input
               id="website"
               name="website"
+              type="url"
+              label="Website"
               value={formData.website}
               onChange={handleChange}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
               placeholder="https://example.com"
             />
           </div>
 
           <div className="flex justify-end space-x-4">
-            <button
+            <Button
               type="button"
+              variant="secondary"
               onClick={() => navigate(`/profile/${user?.username}`)}
-              className="px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
             >
               Cancel
-            </button>
-            <button
+            </Button>
+            <Button
               type="submit"
+              variant="primary"
               disabled={isSubmitting}
-              className="px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {isSubmitting ? 'Saving...' : 'Save Changes'}
-            </button>
+            </Button>
           </div>
         </form>
       </div>

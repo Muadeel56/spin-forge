@@ -28,15 +28,15 @@ function ProfileSummary({ profile }) {
   };
 
   const getRatingColor = (rating) => {
-    if (rating >= 8) return 'bg-blue-600';
-    if (rating >= 5) return 'bg-blue-400';
-    return 'bg-blue-300';
+    if (rating >= 8) return 'bg-primary-600';
+    if (rating >= 5) return 'bg-primary-500';
+    return 'bg-primary-400';
   };
 
   return (
-    <div className="bg-white rounded-lg shadow-md p-6">
+    <div className="bg-surface rounded-lg shadow-md p-6 border border-theme">
       <div className="mb-6">
-        <h2 className="text-2xl font-bold text-gray-900 mb-2">
+        <h2 className="text-2xl font-bold text-primary mb-2">
           {profile.display_name || profile.username}
         </h2>
         {profile.playing_level && (
@@ -52,20 +52,20 @@ function ProfileSummary({ profile }) {
 
       {profile.bio && (
         <div className="mb-6">
-          <p className="text-gray-700">{profile.bio}</p>
+          <p className="text-secondary">{profile.bio}</p>
         </div>
       )}
 
       <div className="mb-6">
-        <h3 className="text-lg font-semibold text-gray-900 mb-4">Skill Ratings</h3>
+        <h3 className="text-lg font-semibold text-primary mb-4">Skill Ratings</h3>
         <div className="space-y-4">
           {skills.map((skill) => (
             <div key={skill.name}>
               <div className="flex justify-between items-center mb-1">
-                <span className="text-sm font-medium text-gray-700">{skill.name}</span>
-                <span className="text-sm font-semibold text-gray-900">{skill.rating}/10</span>
+                <span className="text-sm font-medium text-secondary">{skill.name}</span>
+                <span className="text-sm font-semibold text-primary">{skill.rating}/10</span>
               </div>
-              <div className="w-full bg-gray-200 rounded-full h-2">
+              <div className="w-full bg-tertiary rounded-full h-2">
                 <div
                   className={`h-2 rounded-full ${getRatingColor(skill.rating)}`}
                   style={{ width: `${(skill.rating / 10) * 100}%` }}
@@ -77,8 +77,8 @@ function ProfileSummary({ profile }) {
       </div>
 
       {(profile.location || profile.website) && (
-        <div className="pt-4 border-t border-gray-200">
-          <div className="space-y-2 text-sm text-gray-600">
+        <div className="pt-4 border-t border-theme">
+          <div className="space-y-2 text-sm text-secondary">
             {profile.location && (
               <div>
                 <span className="font-medium">Location:</span> {profile.location}
@@ -91,7 +91,7 @@ function ProfileSummary({ profile }) {
                   href={profile.website}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-blue-600 hover:text-blue-800"
+                  className="text-primary-600 hover:text-primary-800 dark:text-primary-400 dark:hover:text-primary-300"
                 >
                   {profile.website}
                 </a>
