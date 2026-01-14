@@ -1,6 +1,9 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
+import BaseLayout from '@/layouts/BaseLayout';
+import Input from '@/components/Input';
+import Button from '@/components/Button';
 
 function SignupPage() {
   const [formData, setFormData] = useState({
@@ -95,143 +98,116 @@ function SignupPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-md w-full space-y-8">
-        <div>
-          <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
-            Create your account
-          </h2>
-          <p className="mt-2 text-center text-sm text-gray-600">
-            Or{' '}
-            <Link
-              to="/login"
-              className="font-medium text-blue-600 hover:text-blue-500"
-            >
-              sign in to your existing account
-            </Link>
-          </p>
-        </div>
-        <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
-          {error && (
-            <div className="rounded-md bg-red-50 p-4">
-              <div className="flex">
-                <div className="ml-3">
-                  <h3 className="text-sm font-medium text-red-800">{error}</h3>
+    <BaseLayout>
+      <div className="min-h-[calc(100vh-4rem)] flex items-center justify-center bg-primary py-12 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-md w-full space-y-8">
+          <div>
+            <h2 className="mt-6 text-center text-3xl font-extrabold text-primary">
+              Create your account
+            </h2>
+            <p className="mt-2 text-center text-sm text-secondary">
+              Or{' '}
+              <Link
+                to="/login"
+                className="font-medium text-primary-600 hover:text-primary-700 dark:text-primary-400 dark:hover:text-primary-300"
+              >
+                sign in to your existing account
+              </Link>
+            </p>
+          </div>
+          <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
+            {error && (
+              <div className="rounded-md bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 p-4">
+                <div className="flex">
+                  <div className="ml-3">
+                    <h3 className="text-sm font-medium text-red-800 dark:text-red-200">{error}</h3>
+                  </div>
                 </div>
               </div>
-            </div>
-          )}
-          <div className="rounded-md shadow-sm space-y-4">
-            <div>
-              <label htmlFor="email" className="block text-sm font-medium text-gray-700">
-                Email address
-              </label>
-              <input
+            )}
+            <div className="space-y-4">
+              <Input
                 id="email"
                 name="email"
                 type="email"
+                label="Email address"
                 autoComplete="email"
                 required
-                className="mt-1 appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                 placeholder="Email address"
                 value={formData.email}
                 onChange={handleChange}
               />
-            </div>
-            <div>
-              <label htmlFor="username" className="block text-sm font-medium text-gray-700">
-                Username
-              </label>
-              <input
+              <Input
                 id="username"
                 name="username"
                 type="text"
+                label="Username"
                 autoComplete="username"
                 required
-                className="mt-1 appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                 placeholder="Username"
                 value={formData.username}
                 onChange={handleChange}
               />
-            </div>
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <label htmlFor="firstName" className="block text-sm font-medium text-gray-700">
-                  First name
-                </label>
-                <input
+              <div className="grid grid-cols-2 gap-4">
+                <Input
                   id="firstName"
                   name="firstName"
                   type="text"
+                  label="First name"
                   autoComplete="given-name"
-                  className="mt-1 appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                   placeholder="First name"
                   value={formData.firstName}
                   onChange={handleChange}
                 />
-              </div>
-              <div>
-                <label htmlFor="lastName" className="block text-sm font-medium text-gray-700">
-                  Last name
-                </label>
-                <input
+                <Input
                   id="lastName"
                   name="lastName"
                   type="text"
+                  label="Last name"
                   autoComplete="family-name"
-                  className="mt-1 appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                   placeholder="Last name"
                   value={formData.lastName}
                   onChange={handleChange}
                 />
               </div>
-            </div>
-            <div>
-              <label htmlFor="password" className="block text-sm font-medium text-gray-700">
-                Password
-              </label>
-              <input
+              <Input
                 id="password"
                 name="password"
                 type="password"
+                label="Password"
                 autoComplete="new-password"
                 required
-                className="mt-1 appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                 placeholder="Password (min. 8 characters)"
                 value={formData.password}
                 onChange={handleChange}
               />
-            </div>
-            <div>
-              <label htmlFor="passwordConfirm" className="block text-sm font-medium text-gray-700">
-                Confirm password
-              </label>
-              <input
+              <Input
                 id="passwordConfirm"
                 name="passwordConfirm"
                 type="password"
+                label="Confirm password"
                 autoComplete="new-password"
                 required
-                className="mt-1 appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                 placeholder="Confirm password"
                 value={formData.passwordConfirm}
                 onChange={handleChange}
               />
             </div>
-          </div>
 
-          <div>
-            <button
-              type="submit"
-              disabled={isSubmitting}
-              className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              {isSubmitting ? 'Creating account...' : 'Sign up'}
-            </button>
-          </div>
-        </form>
+            <div>
+              <Button
+                type="submit"
+                disabled={isSubmitting}
+                className="w-full"
+                variant="primary"
+              >
+                {isSubmitting ? 'Creating account...' : 'Sign up'}
+              </Button>
+            </div>
+          </form>
+        </div>
       </div>
-    </div>
+    </BaseLayout>
   );
 }
 

@@ -1,5 +1,7 @@
 import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '@/contexts/AuthContext'
+import ThemeToggle from '@/components/ThemeToggle'
+import Button from '@/components/Button'
 
 function Header() {
   const { isAuthenticated, user, logout } = useAuth()
@@ -11,55 +13,51 @@ function Header() {
   }
 
   return (
-    <header className="bg-white shadow-sm border-b border-gray-200">
+    <header className="bg-surface shadow-sm border-b border-theme">
       <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           <div className="flex items-center">
-            <Link to="/" className="text-2xl font-bold text-gray-900 hover:text-gray-700 transition-colors">
+            <Link to="/" className="text-2xl font-bold text-primary hover:text-primary-600 transition-colors">
               SpinForge
             </Link>
           </div>
           <div className="hidden md:flex items-center space-x-8">
             {isAuthenticated && (
               <>
-                <Link to="/" className="text-gray-700 hover:text-gray-900 transition-colors">
+                <Link to="/" className="text-secondary hover:text-primary transition-colors">
                   Home
                 </Link>
-                <Link to="#" className="text-gray-700 hover:text-gray-900 transition-colors">
+                <Link to="#" className="text-secondary hover:text-primary transition-colors">
                   Explore
                 </Link>
-                <Link to="#" className="text-gray-700 hover:text-gray-900 transition-colors">
+                <Link to="#" className="text-secondary hover:text-primary transition-colors">
                   About
                 </Link>
               </>
             )}
           </div>
           <div className="flex items-center space-x-4">
+            <ThemeToggle />
             {isAuthenticated ? (
               <>
-                <span className="text-sm text-gray-700">
+                <span className="text-sm text-secondary">
                   {user?.username || user?.email}
                 </span>
-                <button
-                  onClick={handleLogout}
-                  className="px-4 py-2 text-sm font-medium text-gray-700 hover:text-gray-900 transition-colors"
-                >
+                <Button variant="ghost" size="sm" onClick={handleLogout}>
                   Logout
-                </button>
+                </Button>
               </>
             ) : (
               <>
-                <Link
-                  to="/login"
-                  className="px-4 py-2 text-sm font-medium text-gray-700 hover:text-gray-900 transition-colors"
-                >
-                  Sign In
+                <Link to="/login">
+                  <Button variant="ghost" size="sm">
+                    Sign In
+                  </Button>
                 </Link>
-                <Link
-                  to="/signup"
-                  className="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700 transition-colors"
-                >
-                  Sign Up
+                <Link to="/signup">
+                  <Button variant="primary" size="sm">
+                    Sign Up
+                  </Button>
                 </Link>
               </>
             )}
