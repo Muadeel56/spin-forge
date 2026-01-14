@@ -3,6 +3,9 @@ import BaseLayout from '@/layouts/BaseLayout'
 import ProtectedRoute from '@/components/ProtectedRoute'
 import LoginPage from '@/pages/LoginPage'
 import SignupPage from '@/pages/SignupPage'
+import ProfileSetupPage from '@/pages/ProfileSetupPage'
+import ProfileEditPage from '@/pages/ProfileEditPage'
+import PublicProfilePage from '@/pages/PublicProfilePage'
 import { useAuth } from '@/contexts/AuthContext'
 
 function HomePage() {
@@ -41,6 +44,23 @@ function App() {
           </ProtectedRoute>
         }
       />
+      <Route
+        path="/profile/setup"
+        element={
+          <ProtectedRoute>
+            <ProfileSetupPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/profile/edit"
+        element={
+          <ProtectedRoute>
+            <ProfileEditPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route path="/profile/:username" element={<PublicProfilePage />} />
     </Routes>
   )
 }
