@@ -1,14 +1,37 @@
+import { useState, useCallback } from 'react';
+import LoadingSpinner from './LoadingSpinner';
+
 function Button({
   children,
   variant = 'primary',
   size = 'md',
   className = '',
   disabled = false,
+  loading = false,
   type = 'button',
+  onClick,
+  preventDoubleClick = true,
   ...props
 }) {
+  const [isClicking, setIsClicking] = useState(false);
+
+  const handleClick = useCallback(async (e) => {
+    if (!onClick || isClicking || loading || disabled) return;
+    
+    if (preventDoubleClick) {
+      setIsClicking(true);
+      try {
+        await onClick(e);
+      } finally {
+        setIsClicking(false);
+      }
+    } else {
+      onClick(e);
+    }
+  }, [onClick, isClicking, loading, disabled, preventDoubleClick]);
+
   const baseStyles =
-    'inline-flex items-center justify-center font-medium rounded-md transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed';
+    'inline-flex items-center justify-center font-medium rounded-md transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus-visible:ring-2 disabled:opacity-50 disabled:cursor-not-allowed';
 
   const variants = {
     primary:
@@ -19,6 +42,8 @@ function Button({
       'bg-transparent text-primary hover:bg-tertiary focus:ring-primary-600',
     accent:
       'bg-accent-600 text-white hover:bg-accent-700 focus:ring-accent-600',
+    danger:
+      'bg-red-600 text-white hover:bg-red-700 focus:ring-red-600',
   };
 
   const sizes = {
@@ -29,14 +54,19 @@ function Button({
 
   const variantStyles = variants[variant] || variants.primary;
   const sizeStyles = sizes[size] || sizes.md;
+  const isDisabled = disabled || loading || isClicking;
 
   return (
     <button
       type={type}
-      disabled={disabled}
+      disabled={isDisabled}
       className={`${baseStyles} ${variantStyles} ${sizeStyles} ${className}`}
+      onClick={handleClick}
       {...props}
     >
+      {loading && (
+        <LoadingSpinner size="sm" className="mr-2" />
+      )}
       {children}
     </button>
   );
