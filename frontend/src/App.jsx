@@ -6,53 +6,11 @@ import SignupPage from '@/pages/SignupPage'
 import ProfileSetupPage from '@/pages/ProfileSetupPage'
 import ProfileEditPage from '@/pages/ProfileEditPage'
 import PublicProfilePage from '@/pages/PublicProfilePage'
+import FeedPage from '@/pages/FeedPage'
 import LearnPage from '@/pages/LearnPage'
 import RulesPage from '@/pages/RulesPage'
 import SettingsPage from '@/pages/SettingsPage'
 import NotFoundPage from '@/pages/NotFoundPage'
-import { useAuth } from '@/contexts/AuthContext'
-import { useHeroAnimation, useScrollAnimation } from '@/hooks/useScrollAnimation'
-
-function HomePage() {
-  const { user } = useAuth()
-  const heroTitleRef = useHeroAnimation({ delay: 0.1 })
-  const heroSubtitleRef = useHeroAnimation({ delay: 0.3 })
-  const infoCardRef = useScrollAnimation({
-    animationType: 'slideUp',
-    start: 'top 85%',
-    delay: 0.2,
-    duration: 0.8,
-  })
-
-  return (
-    <BaseLayout>
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="text-center">
-          <h1 
-            ref={heroTitleRef}
-            className="text-4xl font-bold text-gray-900 dark:text-gray-100 mb-4"
-          >
-            Welcome to SpinForge{user ? `, ${user.username}` : ''}
-          </h1>
-          <p 
-            ref={heroSubtitleRef}
-            className="text-xl text-gray-600 dark:text-gray-400 mb-8"
-          >
-            Your community platform is ready to go!
-          </p>
-          <div 
-            ref={infoCardRef}
-            className="bg-primary-50 dark:bg-primary-900/20 border border-primary-200 dark:border-primary-800 rounded-lg p-6 max-w-2xl mx-auto"
-          >
-            <p className="text-primary-800 dark:text-primary-200">
-              Frontend and backend setup complete. Ready for feature development!
-            </p>
-          </div>
-        </div>
-      </div>
-    </BaseLayout>
-  )
-}
 
 function App() {
   return (
@@ -63,7 +21,7 @@ function App() {
       <Route path="/profile/:username" element={<PublicProfilePage />} />
       
       {/* Main navigation routes */}
-      <Route path="/" element={<ProtectedRoute><HomePage /></ProtectedRoute>} />
+      <Route path="/" element={<ProtectedRoute><FeedPage /></ProtectedRoute>} />
       <Route path="/learn" element={<LearnPage />} />
       <Route path="/rules" element={<RulesPage />} />
       
