@@ -8,6 +8,8 @@ import ProfileEditPage from '@/pages/ProfileEditPage'
 import PublicProfilePage from '@/pages/PublicProfilePage'
 import FeedPage from '@/pages/FeedPage'
 import LearnPage from '@/pages/LearnPage'
+import SectionPage from '@/pages/SectionPage'
+import TopicPage from '@/pages/TopicPage'
 import RulesPage from '@/pages/RulesPage'
 import SettingsPage from '@/pages/SettingsPage'
 import NotFoundPage from '@/pages/NotFoundPage'
@@ -23,6 +25,8 @@ function App() {
       {/* Main navigation routes */}
       <Route path="/" element={<ProtectedRoute><FeedPage /></ProtectedRoute>} />
       <Route path="/learn" element={<LearnPage />} />
+      <Route path="/learn/:section" element={<SectionPage />} />
+      <Route path="/learn/:section/:topic" element={<TopicPage />} />
       <Route path="/rules" element={<RulesPage />} />
       
       {/* Protected routes */}
