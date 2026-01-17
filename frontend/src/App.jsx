@@ -1,4 +1,5 @@
-import { Routes, Route } from 'react-router-dom'
+import { Routes, Route, useLocation } from 'react-router-dom'
+import { AnimatePresence } from 'framer-motion'
 import BaseLayout from '@/layouts/BaseLayout'
 import ProtectedRoute from '@/components/ProtectedRoute'
 import LoginPage from '@/pages/LoginPage'
@@ -15,28 +16,32 @@ import SettingsPage from '@/pages/SettingsPage'
 import NotFoundPage from '@/pages/NotFoundPage'
 
 function App() {
+  const location = useLocation()
+
   return (
-    <Routes>
-      {/* Public routes */}
-      <Route path="/login" element={<LoginPage />} />
-      <Route path="/signup" element={<SignupPage />} />
-      <Route path="/profile/:username" element={<PublicProfilePage />} />
-      
-      {/* Main navigation routes */}
-      <Route path="/" element={<ProtectedRoute><FeedPage /></ProtectedRoute>} />
-      <Route path="/learn" element={<LearnPage />} />
-      <Route path="/learn/:section" element={<SectionPage />} />
-      <Route path="/learn/:section/:topic" element={<TopicPage />} />
-      <Route path="/rules" element={<RulesPage />} />
-      
-      {/* Protected routes */}
-      <Route path="/profile/setup" element={<ProtectedRoute><ProfileSetupPage /></ProtectedRoute>} />
-      <Route path="/profile/edit" element={<ProtectedRoute><ProfileEditPage /></ProtectedRoute>} />
-      <Route path="/settings" element={<ProtectedRoute><SettingsPage /></ProtectedRoute>} />
-      
-      {/* 404 catch-all */}
-      <Route path="*" element={<NotFoundPage />} />
-    </Routes>
+    <AnimatePresence mode="wait" initial={false}>
+      <Routes location={location} key={location.pathname}>
+        {/* Public routes */}
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/signup" element={<SignupPage />} />
+        <Route path="/profile/:username" element={<PublicProfilePage />} />
+        
+        {/* Main navigation routes */}
+        <Route path="/" element={<ProtectedRoute><FeedPage /></ProtectedRoute>} />
+        <Route path="/learn" element={<LearnPage />} />
+        <Route path="/learn/:section" element={<SectionPage />} />
+        <Route path="/learn/:section/:topic" element={<TopicPage />} />
+        <Route path="/rules" element={<RulesPage />} />
+        
+        {/* Protected routes */}
+        <Route path="/profile/setup" element={<ProtectedRoute><ProfileSetupPage /></ProtectedRoute>} />
+        <Route path="/profile/edit" element={<ProtectedRoute><ProfileEditPage /></ProtectedRoute>} />
+        <Route path="/settings" element={<ProtectedRoute><SettingsPage /></ProtectedRoute>} />
+        
+        {/* 404 catch-all */}
+        <Route path="*" element={<NotFoundPage />} />
+      </Routes>
+    </AnimatePresence>
   )
 }
 

@@ -1,8 +1,11 @@
 import { useState } from 'react'
 import { Link, useNavigate, useLocation } from 'react-router-dom'
+import { motion, AnimatePresence } from 'framer-motion'
 import { useAuth } from '@/contexts/AuthContext'
 import ThemeToggle from '@/components/ThemeToggle'
 import Button from '@/components/Button'
+import { staggerContainer, staggerItem, mobileMenu } from '@/motion/variants'
+import { fast } from '@/motion/transitions'
 
 function Header() {
   const { isAuthenticated, user, logout } = useAuth()
@@ -26,14 +29,29 @@ function Header() {
   const NavLink = ({ to, label }) => (
     <Link
       to={to}
-      className={`transition-colors ${
-        isActive(to)
-          ? 'text-primary-600 font-semibold'
-          : 'text-secondary hover:text-primary'
-      }`}
+      className="relative"
       onClick={() => setMobileMenuOpen(false)}
     >
-      {label}
+      <motion.span
+        className={`transition-colors ${
+          isActive(to)
+            ? 'text-primary-600 font-semibold'
+            : 'text-secondary hover:text-primary'
+        }`}
+        whileHover={{ scale: 1.05 }}
+        whileTap={{ scale: 0.95 }}
+        transition={fast}
+      >
+        {label}
+      </motion.span>
+      {isActive(to) && (
+        <motion.div
+          layoutId="activeNavLink"
+          className="absolute -bottom-1 left-0 right-0 h-0.5 bg-primary-600"
+          initial={false}
+          transition={{ type: 'spring', stiffness: 300, damping: 30 }}
+        />
+      )}
     </Link>
   )
 
@@ -43,8 +61,15 @@ function Header() {
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
           <div className="flex items-center">
-            <Link to="/" className="text-2xl font-bold text-primary hover:text-primary-600 transition-colors">
-              SpinForge
+            <Link to="/" className="text-2xl font-bold">
+              <motion.span
+                className="text-primary hover:text-primary-600 transition-colors"
+                whileHover={{ scale: 1.03 }}
+                whileTap={{ scale: 0.97 }}
+                transition={fast}
+              >
+                SpinForge
+              </motion.span>
             </Link>
           </div>
 
@@ -115,79 +140,99 @@ function Header() {
         </div>
 
         {/* Mobile Navigation */}
-        {mobileMenuOpen && (
-          <div className="md:hidden border-t border-theme py-4 space-y-2">
-            {navLinks.map((link) => (
-              <Link
-                key={link.to}
-                to={link.to}
-                className={`block py-3 px-2 rounded-md text-base transition-colors ${
-                  isActive(link.to)
-                    ? 'text-primary-600 font-semibold bg-primary-50 dark:bg-primary-900/20'
-                    : 'text-secondary hover:text-primary hover:bg-tertiary'
-                }`}
-                onClick={() => setMobileMenuOpen(false)}
+        <AnimatePresence>
+          {mobileMenuOpen && (
+            <motion.div
+              className="md:hidden border-t border-theme"
+              initial="initial"
+              animate="animate"
+              exit="exit"
+              variants={mobileMenu}
+            >
+              <motion.div
+                className="py-4 space-y-2"
+                variants={staggerContainer}
+                initial="initial"
+                animate="animate"
+                exit="exit"
               >
-                {link.label}
-              </Link>
-            ))}
-            
-            <div className="border-t border-theme pt-4 mt-4 space-y-2">
-              {isAuthenticated ? (
-                <>
-                  <Link
-                    to={`/profile/${user?.username}`}
-                    className={`block py-3 px-2 rounded-md text-base transition-colors ${
-                      location.pathname.startsWith('/profile')
-                        ? 'text-primary-600 font-semibold bg-primary-50 dark:bg-primary-900/20'
-                        : 'text-secondary hover:text-primary hover:bg-tertiary'
-                    }`}
-                    onClick={() => setMobileMenuOpen(false)}
-                  >
-                    Profile
-                  </Link>
-                  <Link
-                    to="/settings"
-                    className={`block py-3 px-2 rounded-md text-base transition-colors ${
-                      isActive('/settings')
-                        ? 'text-primary-600 font-semibold bg-primary-50 dark:bg-primary-900/20'
-                        : 'text-secondary hover:text-primary hover:bg-tertiary'
-                    }`}
-                    onClick={() => setMobileMenuOpen(false)}
-                  >
-                    Settings
-                  </Link>
-                  <button
-                    onClick={() => {
-                      handleLogout()
-                      setMobileMenuOpen(false)
-                    }}
-                    className="block w-full text-left py-3 px-2 rounded-md text-base text-secondary hover:text-primary hover:bg-tertiary transition-colors"
-                  >
-                    Logout
-                  </button>
-                </>
-              ) : (
-                <>
-                  <Link
-                    to="/login"
-                    className="block py-3 px-2 rounded-md text-base text-secondary hover:text-primary hover:bg-tertiary transition-colors"
-                    onClick={() => setMobileMenuOpen(false)}
-                  >
-                    Sign In
-                  </Link>
-                  <Link
-                    to="/signup"
-                    className="block py-3 px-2 rounded-md text-base text-center bg-primary-600 text-white hover:bg-primary-700 transition-colors"
-                    onClick={() => setMobileMenuOpen(false)}
-                  >
-                    Sign Up
-                  </Link>
-                </>
-              )}
-            </div>
-          </div>
-        )}
+                {navLinks.map((link) => (
+                  <motion.div key={link.to} variants={staggerItem}>
+                    <Link
+                      to={link.to}
+                      className={`block py-3 px-2 rounded-md text-base transition-colors ${
+                        isActive(link.to)
+                          ? 'text-primary-600 font-semibold bg-primary-50 dark:bg-primary-900/20'
+                          : 'text-secondary hover:text-primary hover:bg-tertiary'
+                      }`}
+                      onClick={() => setMobileMenuOpen(false)}
+                    >
+                      {link.label}
+                    </Link>
+                  </motion.div>
+                ))}
+                
+                <motion.div
+                  className="border-t border-theme pt-4 mt-4 space-y-2"
+                  variants={staggerItem}
+                >
+                  {isAuthenticated ? (
+                    <>
+                      <Link
+                        to={`/profile/${user?.username}`}
+                        className={`block py-3 px-2 rounded-md text-base transition-colors ${
+                          location.pathname.startsWith('/profile')
+                            ? 'text-primary-600 font-semibold bg-primary-50 dark:bg-primary-900/20'
+                            : 'text-secondary hover:text-primary hover:bg-tertiary'
+                        }`}
+                        onClick={() => setMobileMenuOpen(false)}
+                      >
+                        Profile
+                      </Link>
+                      <Link
+                        to="/settings"
+                        className={`block py-3 px-2 rounded-md text-base transition-colors ${
+                          isActive('/settings')
+                            ? 'text-primary-600 font-semibold bg-primary-50 dark:bg-primary-900/20'
+                            : 'text-secondary hover:text-primary hover:bg-tertiary'
+                        }`}
+                        onClick={() => setMobileMenuOpen(false)}
+                      >
+                        Settings
+                      </Link>
+                      <button
+                        onClick={() => {
+                          handleLogout()
+                          setMobileMenuOpen(false)
+                        }}
+                        className="block w-full text-left py-3 px-2 rounded-md text-base text-secondary hover:text-primary hover:bg-tertiary transition-colors"
+                      >
+                        Logout
+                      </button>
+                    </>
+                  ) : (
+                    <>
+                      <Link
+                        to="/login"
+                        className="block py-3 px-2 rounded-md text-base text-secondary hover:text-primary hover:bg-tertiary transition-colors"
+                        onClick={() => setMobileMenuOpen(false)}
+                      >
+                        Sign In
+                      </Link>
+                      <Link
+                        to="/signup"
+                        className="block py-3 px-2 rounded-md text-base text-center bg-primary-600 text-white hover:bg-primary-700 transition-colors"
+                        onClick={() => setMobileMenuOpen(false)}
+                      >
+                        Sign Up
+                      </Link>
+                    </>
+                  )}
+                </motion.div>
+              </motion.div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </nav>
     </header>
   )

@@ -1,5 +1,6 @@
 import { useParams, Navigate } from 'react-router-dom'
 import BaseLayout from '@/layouts/BaseLayout'
+import PageTransition from '@/components/PageTransition'
 import { useScrollAnimation } from '@/hooks/useScrollAnimation'
 import Breadcrumb from '@/components/learn/Breadcrumb'
 import TopicCard from '@/components/learn/TopicCard'
@@ -33,7 +34,8 @@ function SectionPage() {
 
   return (
     <BaseLayout>
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <PageTransition>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <Breadcrumb items={breadcrumbItems} />
 
         {/* Section Header */}
@@ -66,7 +68,8 @@ function SectionPage() {
             ))}
           </div>
         </div>
-      </div>
+        </div>
+      </PageTransition>
     </BaseLayout>
   )
 }

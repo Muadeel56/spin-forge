@@ -1,5 +1,7 @@
 import { useState, useCallback } from 'react';
+import { motion } from 'framer-motion';
 import LoadingSpinner from './LoadingSpinner';
+import { hoverScale, pressScale } from '@/motion/variants';
 
 function Button({
   children,
@@ -57,18 +59,20 @@ function Button({
   const isDisabled = disabled || loading || isClicking;
 
   return (
-    <button
+    <motion.button
       type={type}
       disabled={isDisabled}
       className={`${baseStyles} ${variantStyles} ${sizeStyles} ${className}`}
       onClick={handleClick}
+      whileHover={!isDisabled ? hoverScale : {}}
+      whileTap={!isDisabled ? pressScale : {}}
       {...props}
     >
       {loading && (
         <LoadingSpinner size="sm" className="mr-2" />
       )}
       {children}
-    </button>
+    </motion.button>
   );
 }
 
