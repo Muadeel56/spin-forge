@@ -1,3 +1,6 @@
+import AnimatedProgress from '@/motion/AnimatedProgress';
+import StatMotion from '@/motion/StatMotion';
+
 function ProfileSummary({ profile }) {
   if (!profile) {
     return (
@@ -59,18 +62,27 @@ function ProfileSummary({ profile }) {
       <div className="mb-6">
         <h3 className="text-lg font-semibold text-primary mb-4">Skill Ratings</h3>
         <div className="space-y-4">
-          {skills.map((skill) => (
+          {skills.map((skill, index) => (
             <div key={skill.name}>
               <div className="flex justify-between items-center mb-1">
                 <span className="text-sm font-medium text-secondary">{skill.name}</span>
-                <span className="text-sm font-semibold text-primary">{skill.rating}/10</span>
+                <StatMotion 
+                  value={skill.rating}
+                  from={0}
+                  suffix="/10"
+                  className="text-sm font-semibold text-primary"
+                  duration={0.8}
+                />
               </div>
-              <div className="w-full bg-tertiary rounded-full h-2">
-                <div
-                  className={`h-2 rounded-full ${getRatingColor(skill.rating)}`}
-                  style={{ width: `${(skill.rating / 10) * 100}%` }}
-                ></div>
-              </div>
+              <AnimatedProgress
+                value={skill.rating}
+                max={10}
+                barClassName={getRatingColor(skill.rating)}
+                trackClassName="bg-tertiary"
+                height={8}
+                duration={0.8}
+                delay={index * 0.1}
+              />
             </div>
           ))}
         </div>

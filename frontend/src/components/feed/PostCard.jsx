@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useScrollAnimation } from '@/hooks/useScrollAnimation';
+import CardMotion from '@/motion/CardMotion';
 import Avatar from '@/components/Avatar';
 import PostTypeBadge from './PostTypeBadge';
 import PostActions from './PostActions';
@@ -56,9 +57,12 @@ function PostCard({ post, onCommentAdded, animationDelay = 0 }) {
   };
 
   return (
-    <article
+    <CardMotion
+      as="article"
       ref={postCardRef}
-      className={`bg-surface border border-theme rounded-lg p-6 hover:shadow-md transition-shadow duration-200 ${borderColorClass}`}
+      className={`bg-surface border border-theme rounded-lg p-6 ${borderColorClass}`}
+      intensity="medium"
+      enableShadow={true}
     >
       {/* Header */}
       <div className="flex items-start gap-3 mb-4">
@@ -110,7 +114,7 @@ function PostCard({ post, onCommentAdded, animationDelay = 0 }) {
           isLoading={isCommenting}
         />
       )}
-    </article>
+    </CardMotion>
   );
 }
 

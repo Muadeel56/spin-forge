@@ -1,7 +1,7 @@
 import { useState, useCallback } from 'react';
 import { motion } from 'framer-motion';
 import LoadingSpinner from './LoadingSpinner';
-import { hoverScale, pressScale } from '@/motion/variants';
+import { buttonHover, buttonPress } from '@/motion/HoverEffects';
 
 function Button({
   children,
@@ -33,7 +33,7 @@ function Button({
   }, [onClick, isClicking, loading, disabled, preventDoubleClick]);
 
   const baseStyles =
-    'inline-flex items-center justify-center font-medium rounded-md transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus-visible:ring-2 disabled:opacity-50 disabled:cursor-not-allowed';
+    'inline-flex items-center justify-center font-medium rounded-md transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus-visible:ring-2 disabled:opacity-50 disabled:cursor-not-allowed relative overflow-hidden';
 
   const variants = {
     primary:
@@ -64,8 +64,8 @@ function Button({
       disabled={isDisabled}
       className={`${baseStyles} ${variantStyles} ${sizeStyles} ${className}`}
       onClick={handleClick}
-      whileHover={!isDisabled ? hoverScale : {}}
-      whileTap={!isDisabled ? pressScale : {}}
+      whileHover={!isDisabled ? buttonHover() : {}}
+      whileTap={!isDisabled ? buttonPress() : {}}
       {...props}
     >
       {loading && (

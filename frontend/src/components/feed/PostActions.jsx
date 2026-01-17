@@ -12,11 +12,11 @@ function PostActions({ post, onCommentClick }) {
     <div className="flex items-center gap-4 pt-3 border-t border-theme">
       <button
         onClick={onCommentClick}
-        className="flex items-center gap-2 text-sm text-tertiary hover:text-primary transition-colors min-h-[44px] min-w-[44px] px-2"
+        className="flex items-center gap-2 text-sm text-tertiary hover:text-primary transition-all duration-200 min-h-11 min-w-11 px-2 hover:scale-105 active:scale-95"
         aria-label="Comment on post"
       >
         <svg
-          className="w-5 h-5"
+          className="w-5 h-5 transition-transform duration-200"
           fill="none"
           stroke="currentColor"
           viewBox="0 0 24 24"
@@ -33,11 +33,11 @@ function PostActions({ post, onCommentClick }) {
 
       <button
         onClick={handleViewProfile}
-        className="flex items-center gap-2 text-sm text-tertiary hover:text-primary transition-colors min-h-[44px] min-w-[44px] px-2"
+        className="flex items-center gap-2 text-sm text-tertiary hover:text-primary transition-all duration-200 min-h-11 min-w-11 px-2 hover:scale-105 active:scale-95"
         aria-label={`View ${post.author.display_name || post.author.username}'s profile`}
       >
         <svg
-          className="w-5 h-5"
+          className="w-5 h-5 transition-transform duration-200"
           fill="none"
           stroke="currentColor"
           viewBox="0 0 24 24"
@@ -53,7 +53,7 @@ function PostActions({ post, onCommentClick }) {
       </button>
 
       <button
-        className="flex items-center gap-2 text-sm text-tertiary hover:text-primary transition-colors min-h-[44px] min-w-[44px] px-2 opacity-50 cursor-not-allowed"
+        className="flex items-center gap-2 text-sm text-tertiary hover:text-primary transition-colors min-h-11 min-w-11 px-2 opacity-50 cursor-not-allowed"
         aria-label="Share post (coming soon)"
         disabled
         title="Coming soon"
