@@ -1,4 +1,5 @@
 import BaseLayout from '@/layouts/BaseLayout'
+import PageTransition from '@/components/PageTransition'
 import { useScrollAnimation } from '@/hooks/useScrollAnimation'
 import SectionGrid from '@/components/learn/SectionGrid'
 import { learnSections } from '@/constants/learnContent'
@@ -26,7 +27,8 @@ function LearnPage() {
 
   return (
     <BaseLayout>
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <PageTransition>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         {/* Hero Section */}
         <div className="mb-12">
           <h1 
@@ -48,7 +50,8 @@ function LearnPage() {
         <div ref={gridRef}>
           <SectionGrid sections={learnSections} />
         </div>
-      </div>
+        </div>
+      </PageTransition>
     </BaseLayout>
   )
 }

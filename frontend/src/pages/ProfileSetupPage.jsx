@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import BaseLayout from '@/layouts/BaseLayout';
+import PageTransition from '@/components/PageTransition';
 import SkillRating from '@/components/SkillRating';
 import Input from '@/components/Input';
 import Button from '@/components/Button';
@@ -87,7 +88,8 @@ function ProfileSetupPage() {
 
   return (
     <BaseLayout>
-      <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <PageTransition>
+        <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-primary mb-2">Set Up Your Profile</h1>
           <p className="text-secondary">
@@ -196,7 +198,8 @@ function ProfileSetupPage() {
             </Button>
           </div>
         </form>
-      </div>
+        </div>
+      </PageTransition>
     </BaseLayout>
   );
 }

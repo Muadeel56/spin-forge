@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import BaseLayout from '@/layouts/BaseLayout';
+import PageTransition from '@/components/PageTransition';
 import { useScrollAnimation } from '@/hooks/useScrollAnimation';
 import RuleSection from '@/components/rules/RuleSection';
 import RulesNavigation from '@/components/rules/RulesNavigation';
@@ -28,7 +29,8 @@ function RulesPage() {
 
   return (
     <BaseLayout>
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <PageTransition>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         {/* Hero Section */}
         <div className="mb-12">
           <h1
@@ -120,7 +122,8 @@ function RulesPage() {
         <div className="lg:hidden">
           <RulesNavigation sections={rulesSections} />
         </div>
-      </div>
+        </div>
+      </PageTransition>
     </BaseLayout>
   );
 }

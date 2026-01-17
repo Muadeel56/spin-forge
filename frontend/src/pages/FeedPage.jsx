@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import BaseLayout from '@/layouts/BaseLayout';
+import PageTransition from '@/components/PageTransition';
 import Button from '@/components/Button';
 import EmptyState from '@/components/EmptyState';
 import FeedSkeleton from '@/components/feed/FeedSkeleton';
@@ -57,7 +58,8 @@ function FeedPage() {
 
   return (
     <BaseLayout>
-      <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <PageTransition>
+        <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Header with Create Post Button */}
         <div className="flex items-center justify-between mb-6">
           <h1 className="text-2xl font-bold text-primary">Community Feed</h1>
@@ -139,7 +141,8 @@ function FeedPage() {
           onSubmit={handleCreatePost}
           isLoading={isSubmitting}
         />
-      </div>
+        </div>
+      </PageTransition>
     </BaseLayout>
   );
 }

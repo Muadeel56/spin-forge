@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import BaseLayout from '@/layouts/BaseLayout';
+import PageTransition from '@/components/PageTransition';
 import Input from '@/components/Input';
 import Button from '@/components/Button';
 
@@ -62,7 +63,8 @@ function LoginPage() {
 
   return (
     <BaseLayout>
-      <div className="min-h-[calc(100vh-4rem)] flex items-center justify-center bg-primary py-12 px-4 sm:px-6 lg:px-8">
+      <PageTransition>
+        <div className="min-h-[calc(100vh-4rem)] flex items-center justify-center bg-primary py-12 px-4 sm:px-6 lg:px-8">
         <div className="max-w-md w-full space-y-8">
           <div>
             <h2 className="mt-6 text-center text-3xl font-extrabold text-primary">
@@ -125,7 +127,8 @@ function LoginPage() {
             </div>
           </form>
         </div>
-      </div>
+        </div>
+      </PageTransition>
     </BaseLayout>
   );
 }

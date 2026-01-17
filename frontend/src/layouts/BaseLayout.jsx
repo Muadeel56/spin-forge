@@ -7,7 +7,7 @@ function BaseLayout({ children }) {
     <ThemeProvider>
       <div className="min-h-screen flex flex-col bg-primary">
         <Header />
-        <main className="grow animate-fade-in">
+        <main className="grow">
           {children}
         </main>
         <Footer />

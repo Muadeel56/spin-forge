@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import BaseLayout from '@/layouts/BaseLayout';
+import PageTransition from '@/components/PageTransition';
 import ProfileSummary from '@/components/ProfileSummary';
 import Button from '@/components/Button';
 import { getPublicProfile } from '@/services/profileService';
@@ -84,7 +85,8 @@ function PublicProfilePage() {
 
   return (
     <BaseLayout>
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <PageTransition>
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="mb-6">
           {isOwnProfile && (
             <div className="mb-4 flex justify-end">
@@ -108,7 +110,8 @@ function PublicProfilePage() {
             </p>
           </div>
         )}
-      </div>
+        </div>
+      </PageTransition>
     </BaseLayout>
   );
 }

@@ -1,4 +1,5 @@
 import BaseLayout from '@/layouts/BaseLayout'
+import PageTransition from '@/components/PageTransition'
 import { useAuth } from '@/contexts/AuthContext'
 
 function SettingsPage() {
@@ -6,7 +7,8 @@ function SettingsPage() {
 
   return (
     <BaseLayout>
-      <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <PageTransition>
+        <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <h1 className="text-3xl font-bold text-primary mb-8">Settings</h1>
         
         <div className="bg-surface border border-theme rounded-lg divide-y divide-theme">
@@ -31,7 +33,8 @@ function SettingsPage() {
             </p>
           </div>
         </div>
-      </div>
+        </div>
+      </PageTransition>
     </BaseLayout>
   )
 }
