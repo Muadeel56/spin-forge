@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useAuth } from '@/contexts/AuthContext';
 import { useScrollAnimation } from '@/hooks/useScrollAnimation';
 import CardMotion from '@/motion/CardMotion';
 import Avatar from '@/components/Avatar';
@@ -7,7 +8,8 @@ import PostActions from './PostActions';
 import CommentList from './CommentList';
 import { addComment } from '@/services/postService';
 
-function PostCard({ post, onCommentAdded, animationDelay = 0 }) {
+function PostCard({ post, onCommentAdded, onDelete, animationDelay = 0 }) {
+  const { user, isAuthenticated } = useAuth();
   const [comments, setComments] = useState(post.comments || []);
   const [isCommenting, setIsCommenting] = useState(false);
   const [showComments, setShowComments] = useState(false);
@@ -34,7 +36,9 @@ function PostCard({ post, onCommentAdded, animationDelay = 0 }) {
   const borderColorClass =
     post.post_type === 'achievement'
       ? 'border-l-4 border-accent-500'
-      : 'border-l-4 border-amber-500';
+      : post.post_type === 'struggle'
+      ? 'border-l-4 border-amber-500'
+      : 'border-l-4 border-blue-500';
 
   const handleAddComment = async (postId, commentData) => {
     setIsCommenting(true);
@@ -55,6 +59,14 @@ function PostCard({ post, onCommentAdded, animationDelay = 0 }) {
   const handleCommentClick = () => {
     setShowComments(true);
   };
+
+  const handleDelete = () => {
+    if (onDelete) {
+      onDelete(post.id);
+    }
+  };
+
+  const isAuthor = isAuthenticated && user && user.username === post.author.username;
 
   return (
     <CardMotion
@@ -86,6 +98,28 @@ function PostCard({ post, onCommentAdded, animationDelay = 0 }) {
             <PostTypeBadge postType={post.post_type} />
           </div>
         </div>
+        {isAuthor && (
+          <button
+            onClick={handleDelete}
+            className="p-2 text-tertiary hover:text-red-600 dark:hover:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors"
+            aria-label="Delete post"
+            title="Delete post"
+          >
+            <svg
+              className="w-5 h-5"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+              />
+            </svg>
+          </button>
+        )}
       </div>
 
       {/* Content */}
