@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import { useScrollAnimation } from '@/hooks/useScrollAnimation';
+import CardMotion from '@/motion/CardMotion';
 
 /**
  * Card component for displaying learning sections or topics
@@ -29,13 +30,18 @@ function LearnCard({
 
   return (
     <Link to={to} className={`block ${className}`}>
-      <div
+      <CardMotion
         ref={cardRef}
-        className={`bg-surface border-2 rounded-lg p-6 transition-all duration-200 hover:shadow-lg ${borderColor}`}
+        className={`bg-surface border-2 rounded-lg p-6 ${borderColor}`}
+        intensity="medium"
+        enableShadow={true}
       >
         <div className="flex items-start gap-4">
           {icon && (
-            <div className="text-3xl flex-shrink-0" aria-hidden="true">
+            <div 
+              className="text-3xl shrink-0 transition-transform duration-200 group-hover:scale-110" 
+              aria-hidden="true"
+            >
               {icon}
             </div>
           )}
@@ -50,7 +56,7 @@ function LearnCard({
             )}
           </div>
         </div>
-      </div>
+      </CardMotion>
     </Link>
   );
 }

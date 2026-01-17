@@ -66,7 +66,7 @@ function FeedPage() {
           <Button
             variant="primary"
             onClick={() => setIsModalOpen(true)}
-            className="min-h-[44px]"
+            className="min-h-11"
           >
             <svg
               className="w-5 h-5 mr-2"
