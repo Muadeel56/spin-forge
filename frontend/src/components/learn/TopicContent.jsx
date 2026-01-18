@@ -5,6 +5,11 @@ import LearnCTA from './LearnCTA';
  * Component for displaying topic content with tips, mistakes, and related topics
  */
 function TopicContent({ topic, sectionId }) {
+  // Support both snake_case (from API) and camelCase (from old static content)
+  const keyTips = topic.key_tips || topic.keyTips || []
+  const commonMistakes = topic.common_mistakes || topic.commonMistakes || []
+  const relatedTopics = topic.related_topics || topic.relatedTopics || []
+  
   // Convert markdown-style content to display
   const formatContent = (content) => {
     if (!content) return null;
@@ -134,7 +139,7 @@ function TopicContent({ topic, sectionId }) {
       </div>
 
       {/* Key Tips */}
-      {topic.keyTips && topic.keyTips.length > 0 && (
+      {keyTips && keyTips.length > 0 && (
         <div className="bg-accent-50/50 dark:bg-accent-900/10 border border-accent-200 dark:border-accent-800 rounded-lg p-6">
           <h3 className="text-lg font-semibold text-primary mb-4 flex items-center gap-2">
             <svg className="w-5 h-5 text-accent-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -143,7 +148,7 @@ function TopicContent({ topic, sectionId }) {
             Key Tips
           </h3>
           <ul className="space-y-2">
-            {topic.keyTips.map((tip, index) => (
+            {keyTips.map((tip, index) => (
               <li key={index} className="flex items-start gap-2 text-secondary">
                 <span className="text-accent-600 mt-1">•</span>
                 <span>{tip}</span>
@@ -154,7 +159,7 @@ function TopicContent({ topic, sectionId }) {
       )}
 
       {/* Common Mistakes */}
-      {topic.commonMistakes && topic.commonMistakes.length > 0 && (
+      {commonMistakes && commonMistakes.length > 0 && (
         <div className="bg-red-50/50 dark:bg-red-900/10 border border-red-200 dark:border-red-800 rounded-lg p-6">
           <h3 className="text-lg font-semibold text-primary mb-4 flex items-center gap-2">
             <svg className="w-5 h-5 text-red-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -163,7 +168,7 @@ function TopicContent({ topic, sectionId }) {
             Common Mistakes
           </h3>
           <ul className="space-y-2">
-            {topic.commonMistakes.map((mistake, index) => (
+            {commonMistakes.map((mistake, index) => (
               <li key={index} className="flex items-start gap-2 text-secondary">
                 <span className="text-red-600 mt-1">•</span>
                 <span>{mistake}</span>
@@ -174,16 +179,17 @@ function TopicContent({ topic, sectionId }) {
       )}
 
       {/* Related Topics */}
-      {topic.relatedTopics && topic.relatedTopics.length > 0 && (
+      {relatedTopics && relatedTopics.length > 0 && (
         <div>
           <h3 className="text-lg font-semibold text-primary mb-4">Related Topics</h3>
           <div className="flex flex-wrap gap-2">
-            {topic.relatedTopics.map((related) => {
-              const relatedId = typeof related === 'string' ? related : related.id;
-              const relatedTitle = typeof related === 'string' ? related : related.title;
-              const relatedSectionId = typeof related === 'object' ? related.sectionId : null;
+            {relatedTopics.map((related) => {
+              // Support both old format (string/object with sectionId) and new API format
+              const relatedId = related.topic_id || related.id || related;
+              const relatedTitle = related.title || related;
+              const relatedSectionId = related.section_id || related.sectionId || null;
               
-              if (relatedSectionId) {
+              if (relatedSectionId && typeof relatedTitle === 'string') {
                 return (
                   <Link
                     key={relatedId}
@@ -200,7 +206,7 @@ function TopicContent({ topic, sectionId }) {
                   key={relatedId}
                   className="inline-block px-3 py-1 bg-tertiary rounded-full text-sm text-secondary"
                 >
-                  {relatedId}
+                  {typeof relatedTitle === 'string' ? relatedTitle : relatedId}
                 </span>
               );
             })}

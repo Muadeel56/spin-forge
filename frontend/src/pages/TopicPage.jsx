@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react'
 import { useParams, Navigate } from 'react-router-dom'
 import BaseLayout from '@/layouts/BaseLayout'
 import PageTransition from '@/components/PageTransition'
@@ -5,19 +6,17 @@ import { useScrollAnimation } from '@/hooks/useScrollAnimation'
 import Breadcrumb from '@/components/learn/Breadcrumb'
 import TopicContent from '@/components/learn/TopicContent'
 import TopicNavigation from '@/components/learn/TopicNavigation'
-import { 
-  getSection, 
-  getTopic, 
-  getAdjacentTopics,
-  getRelatedTopics 
-} from '@/constants/learnContent'
+import FeedSkeleton from '@/components/feed/FeedSkeleton'
+import EmptyState from '@/components/EmptyState'
+import learningService from '@/services/learningService'
 
 function TopicPage() {
   const { section: sectionId, topic: topicId } = useParams()
-  const section = getSection(sectionId)
-  const topic = getTopic(sectionId, topicId)
-  const { prev, next } = getAdjacentTopics(sectionId, topicId)
-  const relatedTopics = getRelatedTopics(sectionId, topicId)
+  const [section, setSection] = useState(null)
+  const [topic, setTopic] = useState(null)
+  const [adjacentTopics, setAdjacentTopics] = useState({ prev: null, next: null })
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState(null)
 
   const headerRef = useScrollAnimation({
     animationType: 'fadeIn',
@@ -32,25 +31,82 @@ function TopicPage() {
     duration: 0.8,
   })
 
-  if (!section || !topic) {
-    return <Navigate to="/learn" replace />
+  useEffect(() => {
+    const fetchTopicData = async () => {
+      try {
+        setLoading(true)
+        
+        // Fetch topic details and section details in parallel
+        const [topicData, sectionData] = await Promise.all([
+          learningService.getTopicDetail(topicId),
+          learningService.getSectionDetail(sectionId)
+        ])
+        
+        setTopic(topicData)
+        setSection(sectionData)
+        
+        // Calculate adjacent topics (prev/next)
+        if (sectionData && sectionData.topics) {
+          const currentIndex = sectionData.topics.findIndex(t => t.topic_id === topicId)
+          if (currentIndex !== -1) {
+            setAdjacentTopics({
+              prev: currentIndex > 0 ? sectionData.topics[currentIndex - 1] : null,
+              next: currentIndex < sectionData.topics.length - 1 ? sectionData.topics[currentIndex + 1] : null
+            })
+          }
+        }
+        
+        setError(null)
+      } catch (err) {
+        console.error('Error fetching topic:', err)
+        setError('Failed to load topic. Please try again later.')
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    fetchTopicData()
+  }, [sectionId, topicId])
+
+  if (loading) {
+    return (
+      <BaseLayout>
+        <PageTransition>
+          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+            <FeedSkeleton />
+          </div>
+        </PageTransition>
+      </BaseLayout>
+    )
+  }
+
+  if (error || !topic || !section) {
+    return (
+      <BaseLayout>
+        <PageTransition>
+          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+            <EmptyState
+              title="Topic Not Found"
+              message={error || 'The requested topic could not be found.'}
+              actionLabel="Back to Learn Hub"
+              onAction={() => window.location.href = '/learn'}
+            />
+          </div>
+        </PageTransition>
+      </BaseLayout>
+    )
   }
 
   const breadcrumbItems = [
     { label: 'Learn', to: '/learn' },
-    { label: section.title, to: `/learn/${section.id}` },
-    { label: topic.title, to: `/learn/${section.id}/${topic.id}` },
+    { label: section.title, to: `/learn/${section.section_id}` },
+    { label: topic.title, to: `/learn/${section.section_id}/${topic.topic_id}` },
   ]
 
-  // Enhance topic with related topic details
+  // Enhance topic with related topic details from API
   const enhancedTopic = {
     ...topic,
-    relatedTopics: relatedTopics.map(rt => ({
-      id: rt.id,
-      title: rt.title,
-      sectionId: rt.sectionId,
-      sectionTitle: rt.sectionTitle,
-    })),
+    relatedTopics: topic.related_topics || [],
   }
 
   return (
@@ -78,9 +134,9 @@ function TopicPage() {
 
         {/* Navigation */}
         <TopicNavigation 
-          prevTopic={prev} 
-          nextTopic={next} 
-          sectionId={sectionId} 
+          prevTopic={adjacentTopics.prev} 
+          nextTopic={adjacentTopics.next} 
+          sectionId={section.section_id} 
         />
         </div>
       </PageTransition>

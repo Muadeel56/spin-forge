@@ -1,14 +1,19 @@
+import { useState, useEffect } from 'react'
 import { useParams, Navigate } from 'react-router-dom'
 import BaseLayout from '@/layouts/BaseLayout'
 import PageTransition from '@/components/PageTransition'
 import { useScrollAnimation } from '@/hooks/useScrollAnimation'
 import Breadcrumb from '@/components/learn/Breadcrumb'
 import TopicCard from '@/components/learn/TopicCard'
-import { getSection } from '@/constants/learnContent'
+import FeedSkeleton from '@/components/feed/FeedSkeleton'
+import EmptyState from '@/components/EmptyState'
+import learningService from '@/services/learningService'
 
 function SectionPage() {
   const { section: sectionId } = useParams()
-  const section = getSection(sectionId)
+  const [section, setSection] = useState(null)
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState(null)
 
   const headerRef = useScrollAnimation({
     animationType: 'fadeIn',
@@ -23,13 +28,56 @@ function SectionPage() {
     duration: 0.8,
   })
 
-  if (!section) {
-    return <Navigate to="/learn" replace />
+  useEffect(() => {
+    const fetchSection = async () => {
+      try {
+        setLoading(true)
+        const data = await learningService.getSectionDetail(sectionId)
+        setSection(data)
+        setError(null)
+      } catch (err) {
+        console.error('Error fetching section:', err)
+        setError('Failed to load section. Please try again later.')
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    fetchSection()
+  }, [sectionId])
+
+  if (loading) {
+    return (
+      <BaseLayout>
+        <PageTransition>
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+            <FeedSkeleton />
+          </div>
+        </PageTransition>
+      </BaseLayout>
+    )
+  }
+
+  if (error || !section) {
+    return (
+      <BaseLayout>
+        <PageTransition>
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+            <EmptyState
+              title="Section Not Found"
+              message={error || 'The requested section could not be found.'}
+              actionLabel="Back to Learn Hub"
+              onAction={() => window.location.href = '/learn'}
+            />
+          </div>
+        </PageTransition>
+      </BaseLayout>
+    )
   }
 
   const breadcrumbItems = [
     { label: 'Learn', to: '/learn' },
-    { label: section.title, to: `/learn/${section.id}` },
+    { label: section.title, to: `/learn/${section.section_id}` },
   ]
 
   return (
@@ -57,16 +105,23 @@ function SectionPage() {
 
         {/* Topics Grid */}
         <div ref={topicsRef}>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {section.topics.map((topic, index) => (
-              <TopicCard
-                key={topic.id}
-                topic={topic}
-                sectionId={section.id}
-                animationDelay={index * 0.1}
-              />
-            ))}
-          </div>
+          {section.topics && section.topics.length > 0 ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {section.topics.map((topic, index) => (
+                <TopicCard
+                  key={topic.topic_id}
+                  topic={topic}
+                  sectionId={section.section_id}
+                  animationDelay={index * 0.1}
+                />
+              ))}
+            </div>
+          ) : (
+            <EmptyState
+              title="No Topics Available"
+              message="Topics for this section are being updated. Please check back soon."
+            />
+          )}
         </div>
         </div>
       </PageTransition>

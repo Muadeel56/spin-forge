@@ -70,7 +70,7 @@ class PostListSerializer(serializers.ModelSerializer):
     Includes author info and comment count, but not full comments.
     """
     author = PostAuthorSerializer(read_only=True)
-    comment_count = serializers.IntegerField(read_only=True)
+    comment_count = serializers.SerializerMethodField()
     formatted_timestamp = serializers.SerializerMethodField()
     
     class Meta:
@@ -80,6 +80,17 @@ class PostListSerializer(serializers.ModelSerializer):
             'comment_count', 'created_at', 'formatted_timestamp'
         )
         read_only_fields = ('id', 'created_at', 'author')
+    
+    def get_comment_count(self, obj):
+        """
+        Return comment count from annotated queryset or calculate it.
+        Uses annotated value if available (from queryset), otherwise counts directly.
+        """
+        # Check if the value was annotated in the queryset
+        if hasattr(obj, 'comment_count'):
+            return obj.comment_count
+        # Fallback to counting directly
+        return obj.comments.count()
     
     def get_formatted_timestamp(self, obj):
         """Return human-readable timestamp."""
@@ -109,7 +120,7 @@ class PostDetailSerializer(serializers.ModelSerializer):
     """
     author = PostAuthorSerializer(read_only=True)
     comments = CommentSerializer(many=True, read_only=True)
-    comment_count = serializers.IntegerField(read_only=True)
+    comment_count = serializers.SerializerMethodField()
     formatted_timestamp = serializers.SerializerMethodField()
     
     class Meta:
@@ -119,6 +130,17 @@ class PostDetailSerializer(serializers.ModelSerializer):
             'comments', 'comment_count', 'created_at', 'formatted_timestamp'
         )
         read_only_fields = ('id', 'created_at', 'author')
+    
+    def get_comment_count(self, obj):
+        """
+        Return comment count from annotated queryset or calculate it.
+        Uses annotated value if available (from queryset), otherwise counts directly.
+        """
+        # Check if the value was annotated in the queryset
+        if hasattr(obj, 'comment_count'):
+            return obj.comment_count
+        # Fallback to counting directly
+        return obj.comments.count()
     
     def get_formatted_timestamp(self, obj):
         """Return human-readable timestamp."""
