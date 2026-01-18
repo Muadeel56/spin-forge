@@ -17,9 +17,12 @@ function TopicCard({
     duration: 0.6,
   });
 
+  // Support both old (topic.id) and new (topic.topic_id) structures
+  const topicId = topic.topic_id || topic.id;
+
   return (
     <Link 
-      to={`/learn/${sectionId}/${topic.id}`} 
+      to={`/learn/${sectionId}/${topicId}`} 
       className={`block ${className}`}
     >
       <div

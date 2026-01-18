@@ -47,11 +47,6 @@ class Post(models.Model):
 
     def __str__(self):
         return f"{self.author.username} - {self.post_type} - {self.created_at.strftime('%Y-%m-%d')}"
-    
-    @property
-    def comment_count(self):
-        """Return the number of comments on this post."""
-        return self.comments.count()
 
 
 class Comment(models.Model):

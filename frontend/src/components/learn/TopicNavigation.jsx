@@ -7,12 +7,16 @@ import Button from '@/components/Button';
 function TopicNavigation({ prevTopic, nextTopic, sectionId }) {
   if (!prevTopic && !nextTopic) return null;
 
+  // Support both old (topic.id) and new (topic.topic_id) structures
+  const prevId = prevTopic ? (prevTopic.topic_id || prevTopic.id) : null;
+  const nextId = nextTopic ? (nextTopic.topic_id || nextTopic.id) : null;
+
   return (
     <div className="mt-12 pt-8 border-t border-theme">
       <div className="flex flex-col sm:flex-row justify-between gap-4">
         {prevTopic ? (
           <Link 
-            to={`/learn/${sectionId}/${prevTopic.id}`}
+            to={`/learn/${sectionId}/${prevId}`}
             className="flex-1"
           >
             <Button variant="secondary" className="w-full justify-start">
@@ -31,7 +35,7 @@ function TopicNavigation({ prevTopic, nextTopic, sectionId }) {
 
         {nextTopic ? (
           <Link 
-            to={`/learn/${sectionId}/${nextTopic.id}`}
+            to={`/learn/${sectionId}/${nextId}`}
             className="flex-1"
           >
             <Button variant="secondary" className="w-full justify-end">
