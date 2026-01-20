@@ -3,6 +3,7 @@ import { Link, useNavigate, useLocation } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useAuth } from '@/contexts/AuthContext'
 import ThemeToggle from '@/components/ThemeToggle'
+import NotificationBell from '@/components/NotificationBell'
 import Button from '@/components/Button'
 import { staggerContainer, staggerItem, mobileMenu } from '@/motion/variants'
 import { fast } from '@/motion/transitions'
@@ -83,6 +84,13 @@ function Header() {
           {/* Right side actions */}
           <div className="flex items-center space-x-4">
             <ThemeToggle />
+            
+            {/* Notification bell (only for authenticated users) */}
+            {isAuthenticated && (
+              <div className="hidden md:block">
+                <NotificationBell />
+              </div>
+            )}
             
             {/* Desktop auth actions */}
             <div className="hidden md:flex items-center space-x-4">
