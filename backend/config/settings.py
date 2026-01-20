@@ -51,6 +51,7 @@ INSTALLED_APPS = [
     'profiles',
     'posts',
     'learning',
+    'notifications',
 ]
 
 MIDDLEWARE = [
